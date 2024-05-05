@@ -3,10 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.ItemOBJ;
 import model.ItemList;
 import view.addPage;
+import view.editPage;
 
 /**
  *
@@ -17,10 +20,9 @@ public class mainPage extends javax.swing.JFrame {
     /**
      * Creates new form mainPage
      */
-    
     DefaultTableModel tabela;
     ItemList itensList;
-    
+
     public mainPage() {
         initComponents();
         this.tabela = (DefaultTableModel) tabelaItens.getModel();
@@ -42,7 +44,7 @@ public class mainPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         addButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -76,11 +78,8 @@ public class mainPage extends javax.swing.JFrame {
             tabelaItens.getColumnModel().getColumn(0).setMinWidth(50);
             tabelaItens.getColumnModel().getColumn(0).setPreferredWidth(50);
             tabelaItens.getColumnModel().getColumn(0).setMaxWidth(50);
-            tabelaItens.getColumnModel().getColumn(0).setCellEditor(null);
             tabelaItens.getColumnModel().getColumn(1).setResizable(false);
-            tabelaItens.getColumnModel().getColumn(1).setCellEditor(null);
             tabelaItens.getColumnModel().getColumn(2).setResizable(false);
-            tabelaItens.getColumnModel().getColumn(2).setCellEditor(null);
         }
 
         jLabel1.setFont(new java.awt.Font("SimSun", 1, 24)); // NOI18N
@@ -108,14 +107,14 @@ public class mainPage extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Unispace", 0, 18)); // NOI18N
-        jButton4.setText("Editar Item");
-        jButton4.setToolTipText("");
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jButton4.setIconTextGap(10);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        editButton.setFont(new java.awt.Font("Unispace", 0, 18)); // NOI18N
+        editButton.setText("Editar Item");
+        editButton.setToolTipText("");
+        editButton.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        editButton.setIconTextGap(10);
+        editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                editButtonActionPerformed(evt);
             }
         });
 
@@ -134,7 +133,7 @@ public class mainPage extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(addButton)
                                 .addGap(41, 41, 41)
-                                .addComponent(jButton4)
+                                .addComponent(editButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1050, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -150,7 +149,7 @@ public class mainPage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42))
         );
@@ -167,12 +166,29 @@ public class mainPage extends javax.swing.JFrame {
         addPage.setVisible(true);
     }//GEN-LAST:event_addButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        if (tabelaItens.getSelectedRow() != -1) {
+            editPage editPage = new editPage(this, itensList);
+            editPage.setVisible(true);
+            editPage.textFieldSet(tabelaItens.getSelectedRow());
+        } else {
+            JOptionPane.showMessageDialog(null, "SELECIONE QUAL ITEM DESEJA EDITAR", "SELECT ERROR", JOptionPane.WARNING_MESSAGE);
+        }
 
-    public void tableUpdate(int indiceItem,ItemOBJ item){
-        tabela.addRow(new Object[]{indiceItem + 1,item.getNome(),item.getQuantidade()});
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    public void tableUpdate(int indiceItem, ItemOBJ item) {
+        tabela.addRow(new Object[]{indiceItem + 1, item.getNome(), item.getQuantidade()});
+    }
+
+    public void editRow(int indexItem){
+        ItemOBJ item = itensList.getItem(indexItem);
+        tabela.removeRow(indexItem);
+        tabela.insertRow(indexItem, new Object[]{indexItem + 1,item.getNome(),item.getQuantidade()});
+    }
+    
+    public void removeRow (int indexItem){
+        tabela.removeRow(indexItem);
     }
     
     /**
@@ -209,13 +225,12 @@ public class mainPage extends javax.swing.JFrame {
             }
         });
     }
-    
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

@@ -3,30 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+
 import model.ItemOBJ;
 import model.ItemList;
 import view.mainPage;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Yukinas
  */
 public class addPage extends javax.swing.JFrame {
-    
-    ItemOBJ item;
-    ItemList itensList;
-    mainPage mainPage;
-    
+
+    private ItemOBJ item;
+    private ItemList itensList;
+    private mainPage mainPage;
+
     public addPage(mainPage mainPageRef, ItemList itensList) {
         initComponents();
         this.mainPage = mainPageRef;
         this.itensList = itensList;
     }
 
-    addPage(){
-        
+    addPage() {
+
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -129,13 +131,35 @@ public class addPage extends javax.swing.JFrame {
     }//GEN-LAST:event_tfQuantidadeActionPerformed
 
     private void submitAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitAddActionPerformed
-        item = new ItemOBJ();
-        item.setNome(tfNome.getText());
-        item.setQuantidade(tfQuantidade.getText());
-        itensList.addItem(item);
-        mainPage.tableUpdate(itensList.indexItem(item),item);
-        System.out.println(itensList.indexItem(item));
-        this.dispose();
+        boolean isNum = false;
+        boolean isText = false;
+        for (char caractere : tfNome.getText().toCharArray()) {
+            for (char caractere1 : tfQuantidade.getText().toCharArray()) {
+                if (Character.isDigit(caractere)) {
+                    isNum = true;
+                } else if (Character.isLetter(caractere1)) {
+                    isText = true;
+                }
+
+                if (isNum) {
+                    JOptionPane.showMessageDialog(null, "Nome inválido!", "ERRO DIGITAÇÃO", JOptionPane.ERROR_MESSAGE);
+                    break;
+                } else if (isText) {
+                    JOptionPane.showMessageDialog(null, "Quantidade inválida!", "ERRO DIGITAÇÃO!", JOptionPane.ERROR_MESSAGE);
+                    break;
+                }
+            }
+            break;
+        }
+        if (!isNum && !isText) {
+            item = new ItemOBJ();
+            item.setNome(tfNome.getText());
+            item.setQuantidade(tfQuantidade.getText());
+            itensList.addItem(item);
+            mainPage.tableUpdate(itensList.indexItem(item), item);
+            System.out.println(itensList.indexItem(item));
+            this.dispose();
+        }
     }//GEN-LAST:event_submitAddActionPerformed
 
     /**
